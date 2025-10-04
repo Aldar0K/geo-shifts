@@ -20,7 +20,7 @@ export const ShiftCard: React.FC<ShiftCardProps> = React.memo(
               {shift.companyName}
             </Text>
             <Text style={styles.workType} numberOfLines={1}>
-              {shift.workTypes.join(', ')}
+              {shift.workTypes.map(wt => wt.name).join(', ')}
             </Text>
           </View>
         </View>
@@ -50,10 +50,10 @@ export const ShiftCard: React.FC<ShiftCardProps> = React.memo(
         <View style={styles.footer}>
           <Text style={styles.price}>{formatPrice(shift.priceWorker)}</Text>
           <View style={styles.rating}>
-            <Text style={styles.ratingText}>⭐ {shift.customerRating}</Text>
-            <Text style={styles.reviewsCount}>
-              ({shift.customerFeedbacksCount})
+            <Text style={styles.ratingText}>
+              ⭐ {shift.customerRating ?? 'Новый'}
             </Text>
+            <Text style={styles.reviewsCount}>({shift.customerFeedbacksCount})</Text>
           </View>
         </View>
       </TouchableOpacity>

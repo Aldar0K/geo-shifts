@@ -1,18 +1,18 @@
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { observer } from 'mobx-react-lite';
-import React, { useEffect } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
-import { shiftsStore } from '../../../entities/shift/model/shifts.store';
-import { ShiftCard } from '../../../entities/shift/ui/ShiftCard';
-import { getCurrentLocation } from '../../../processes/geo/model/geolocation';
-import { RootStackParamList } from '../../../processes/navigation/types';
-import { ErrorView } from '../../../shared/ui/ErrorView';
-import { Loader } from '../../../shared/ui/Loader';
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { observer } from "mobx-react-lite";
+import React, { useEffect } from "react";
+import { FlatList, StyleSheet, View } from "react-native";
+import { shiftsStore } from "../../../entities/shift/model/shifts.store";
+import { ShiftCard } from "../../../entities/shift/ui/ShiftCard";
+import { getCurrentLocation } from "../../../processes/geo/model/geolocation";
+import { RootStackParamList } from "../../../processes/navigation/types";
+import { ErrorView } from "../../../shared/ui/ErrorView";
+import { Loader } from "../../../shared/ui/Loader";
 
 type NavigationProp = NativeStackNavigationProp<
   RootStackParamList,
-  'ShiftsList'
+  "ShiftsList"
 >;
 
 export const ShiftsListScreen: React.FC = observer(() => {
@@ -26,13 +26,15 @@ export const ShiftsListScreen: React.FC = observer(() => {
     try {
       const location = await getCurrentLocation();
       await shiftsStore.loadShifts(location.latitude, location.longitude);
-    } catch (error) {
-      console.error('Error loading data:', error);
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      console.error("Error loading data:", errorMessage);
     }
   };
 
   const handleShiftPress = (shiftId: string) => {
-    navigation.navigate('ShiftDetails', { shiftId });
+    navigation.navigate("ShiftDetails", { shiftId });
   };
 
   if (shiftsStore.isLoading && shiftsStore.shifts.length === 0) {
@@ -47,7 +49,7 @@ export const ShiftsListScreen: React.FC = observer(() => {
     <View style={styles.container}>
       <FlatList
         data={shiftsStore.shifts}
-        keyExtractor={item => item.id}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <ShiftCard shift={item} onPress={() => handleShiftPress(item.id)} />
         )}
@@ -61,7 +63,7 @@ export const ShiftsListScreen: React.FC = observer(() => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: "#F5F5F5",
   },
   listContent: {
     paddingVertical: 8,

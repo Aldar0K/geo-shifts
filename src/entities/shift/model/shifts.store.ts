@@ -1,6 +1,6 @@
-import {makeAutoObservable, runInAction} from 'mobx';
-import {fetchShifts} from '../api/shifts';
-import {Shift} from './types';
+import { makeAutoObservable, runInAction } from "mobx";
+import { fetchShifts } from "../api/shifts";
+import { Shift } from "./types";
 
 class ShiftsStore {
   shifts: Shift[] = [];
@@ -11,31 +11,30 @@ class ShiftsStore {
     makeAutoObservable(this);
   }
 
-  async loadShifts(lat: number, lon: number) {
+  async loadShifts(latitude: number, longitude: number) {
     this.isLoading = true;
     this.error = null;
 
     try {
-      const data = await fetchShifts({lat, lon});
+      const data = await fetchShifts({ latitude, longitude });
       runInAction(() => {
         this.shifts = data;
         this.isLoading = false;
       });
-    } catch (err) {
+    } catch (error: any) {
       runInAction(() => {
         this.error =
-          err instanceof Error
-            ? err.message
-            : 'Не удалось загрузить список смен';
+          error?.response?.data?.message ||
+          error?.message ||
+          "Не удалось загрузить список смен";
         this.isLoading = false;
       });
     }
   }
 
   getShiftById(id: string): Shift | undefined {
-    return this.shifts.find(shift => shift.id === id);
+    return this.shifts.find((shift) => shift.id === id);
   }
 }
 
 export const shiftsStore = new ShiftsStore();
-

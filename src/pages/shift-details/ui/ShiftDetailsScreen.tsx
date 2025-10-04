@@ -27,9 +27,11 @@ export const ShiftDetailsScreen: React.FC = observer(() => {
         <View style={styles.headerInfo}>
           <Text style={styles.companyName}>{shift.companyName}</Text>
           <View style={styles.ratingContainer}>
-            <Text style={styles.ratingText}>⭐ {shift.customerRating}</Text>
+            <Text style={styles.ratingText}>
+              ⭐ {shift.customerRating ?? 'Новый'}
+            </Text>
             <Text style={styles.reviewsCount}>
-              ({shift.customerFeedbacksCount} отзыва)
+              ({shift.customerFeedbacksCount})
             </Text>
           </View>
         </View>
@@ -37,7 +39,9 @@ export const ShiftDetailsScreen: React.FC = observer(() => {
 
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Тип работы</Text>
-        <Text style={styles.sectionText}>{shift.workTypes.join(', ')}</Text>
+        <Text style={styles.sectionText}>
+          {shift.workTypes.map(wt => wt.name).join(', ')}
+        </Text>
       </View>
 
       <View style={styles.section}>
