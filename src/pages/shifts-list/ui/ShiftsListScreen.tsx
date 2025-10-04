@@ -1,8 +1,8 @@
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { observer } from "mobx-react-lite";
-import React, { useEffect } from "react";
-import { FlatList, StyleSheet, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { FlatList, RefreshControl, StyleSheet, View } from "react-native";
 import { shiftsStore } from "../../../entities/shift/model/shifts.store";
 import { ShiftCard } from "../../../entities/shift/ui/ShiftCard";
 import { getCurrentLocation } from "../../../processes/geo/model/geolocation";
@@ -17,6 +17,7 @@ type NavigationProp = NativeStackNavigationProp<
 
 export const ShiftsListScreen: React.FC = observer(() => {
   const navigation = useNavigation<NavigationProp>();
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -31,6 +32,12 @@ export const ShiftsListScreen: React.FC = observer(() => {
         error instanceof Error ? error.message : String(error);
       console.error("Error loading data:", errorMessage);
     }
+  };
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    await loadData();
+    setRefreshing(false);
   };
 
   const handleShiftPress = (shiftId: string) => {
@@ -55,6 +62,14 @@ export const ShiftsListScreen: React.FC = observer(() => {
         )}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            tintColor="#007AFF"
+            colors={["#007AFF"]}
+          />
+        }
       />
     </View>
   );
