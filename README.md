@@ -1,97 +1,229 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# GeoShifts - React Native App
 
-# Getting Started
+Мобильное приложение для поиска доступных смен для подработки на основе геолокации пользователя.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+## 📋 Описание задания
 
-## Step 1: Start Metro
+Создать небольшое приложение на React Native (CLI, без Expo), которое показывает список доступных смен для подработки, полученных по геолокации пользователя.
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+### Функциональные требования
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+- ✅ При первом запуске запросить точную геолокацию пользователя
+- ✅ Получить список смен в городе, передав координаты пользователя в запрос
+- ✅ Отобразить список смен с краткой информацией
+- ✅ По нажатию на элемент списка открыть экран с подробными данными выбранной смены
+- ✅ Данные для экрана деталей брать из ранее полученного списка (без повторного запроса)
+- ✅ Pull-to-refresh для обновления списка
 
-```sh
-# Using npm
-npm start
+### API
 
-# OR using Yarn
-yarn start
+**Endpoint**: `https://mobile.handswork.pro/api/shifts/map-list-unauthorized`
+
+**Параметры**: `latitude`, `longitude`
+
+### Поля данных смены
+
+| Поле                     | Тип            | Описание                          |
+| ------------------------ | -------------- | --------------------------------- |
+| `logo`                   | string         | Ссылка на логотип нанимателя      |
+| `address`                | string         | Адрес проведения смены            |
+| `companyName`            | string         | Имя компании нанимателя           |
+| `dateStartByCity`        | string         | Дата начала смены                 |
+| `timeStartByCity`        | string         | Время начала                      |
+| `timeEndByCity`          | string         | Время окончания                   |
+| `currentWorkers`         | number         | Сколько людей уже набрано         |
+| `planWorkers`            | number         | Сколько людей требуется           |
+| `workTypes`              | array          | Наименование типа услуги          |
+| `priceWorker`            | number         | Сумма выплаты за смену (в рублях) |
+| `customerFeedbacksCount` | string         | Количество отзывов о клиенте      |
+| `customerRating`         | number \| null | Рейтинг нанимателя (максимум 5)   |
+
+## 🛠 Технологии
+
+- **React Native CLI** (v0.81.4) - без Expo
+- **TypeScript** - строгая типизация
+- **MobX** + mobx-react-lite - управление состоянием
+- **React Navigation** - навигация (Stack Navigator)
+- **Axios** - HTTP клиент для API запросов
+- **@react-native-community/geolocation** - получение геолокации
+
+### Архитектура
+
+Проект построен по методологии **Feature-Sliced Design (FSD)**:
+
+```
+src/
+├── app/              # Инициализация приложения, провайдеры
+├── processes/        # Навигация, геолокация
+├── pages/            # Экраны (ShiftsList, ShiftDetails)
+├── entities/         # Бизнес-сущности (Shift)
+├── shared/           # Переиспользуемый код (UI, API, utils)
 ```
 
-## Step 2: Build and run your app
+## 📦 Установка
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+### Требования
 
-### Android
+- Node.js >= 20
+- React Native development environment ([инструкция](https://reactnative.dev/docs/environment-setup))
+- Xcode (для iOS)
+- Android Studio (для Android)
 
-```sh
-# Using npm
-npm run android
+### Шаги установки
 
-# OR using Yarn
-yarn android
+1. Клонируйте репозиторий:
+
+```bash
+git clone https://github.com/YOUR_USERNAME/geo-shifts.git
+cd geo-shifts
 ```
+
+2. Установите зависимости:
+
+```bash
+npm install
+```
+
+3. Установите pods для iOS:
+
+```bash
+cd ios && pod install && cd ..
+```
+
+## 🚀 Запуск
 
 ### iOS
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
-bundle exec pod install
-```
-
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
-
-```sh
-# Using npm
+```bash
 npm run ios
-
-# OR using Yarn
-yarn ios
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+### Android
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+```bash
+npm run android
+```
 
-## Step 3: Modify your app
+### Dev Server (Metro)
 
-Now that you have successfully run the app, let's make changes!
+```bash
+npm start
+```
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+## 📱 Разрешения
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+### iOS (Info.plist)
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+- `NSLocationWhenInUseUsageDescription` - доступ к геолокации
 
-## Congratulations! :tada:
+### Android (AndroidManifest.xml)
 
-You've successfully run and modified your React Native App. :partying_face:
+- `ACCESS_FINE_LOCATION` - точная геолокация
+- `ACCESS_COARSE_LOCATION` - приблизительная геолокация
 
-### Now what?
+## 🏗 Структура проекта
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+```
+geo-shifts/
+├── src/
+│   ├── app/
+│   │   └── index.tsx                    # Root компонент с провайдерами
+│   ├── processes/
+│   │   ├── navigation/                  # Конфигурация навигации
+│   │   │   ├── types.ts
+│   │   │   └── AppNavigator.tsx
+│   │   └── geo/                         # Модуль геолокации
+│   │       └── model/
+│   │           └── geolocation.ts
+│   ├── pages/
+│   │   ├── shifts-list/                 # Экран списка смен
+│   │   │   └── ui/
+│   │   │       └── ShiftsListScreen.tsx
+│   │   └── shift-details/               # Экран деталей смены
+│   │       └── ui/
+│   │           └── ShiftDetailsScreen.tsx
+│   ├── entities/
+│   │   └── shift/                       # Сущность "Смена"
+│   │       ├── api/
+│   │       │   └── shifts.ts           # API запросы
+│   │       ├── model/
+│   │       │   ├── types.ts            # TypeScript типы
+│   │       │   └── shifts.store.ts     # MobX store
+│   │       └── ui/
+│   │           └── ShiftCard.tsx       # Карточка смены
+│   └── shared/
+│       ├── api/
+│       │   └── client.ts               # Axios client
+│       ├── config/
+│       │   └── constants.ts            # API константы
+│       ├── ui/
+│       │   ├── Loader.tsx              # Индикатор загрузки
+│       │   └── ErrorView.tsx           # Экран ошибки
+│       └── lib/
+│           ├── date.ts                 # Форматирование дат
+│           └── number.ts               # Форматирование чисел
+├── ios/                                 # iOS нативный проект
+├── android/                             # Android нативный проект
+└── App.tsx                              # Entry point
 
-# Troubleshooting
+```
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+## 🎨 Особенности реализации
 
-# Learn More
+### MobX Store
 
-To learn more about React Native, take a look at the following resources:
+Централизованное управление состоянием через `shiftsStore`:
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+- Загрузка списка смен
+- Индикация состояния загрузки
+- Обработка ошибок
+- Кеширование данных для экрана деталей
+
+### Навигация
+
+React Navigation с типизированными параметрами:
+
+- Stack Navigator для переходов между экранами
+- Type-safe navigation props
+
+### UI/UX
+
+- Pull-to-refresh для обновления списка
+- Обработка состояний: loading, error, success
+- Оптимизация списка через `FlatList` и `React.memo`
+- Красивые карточки с тенями и скруглениями
+- Индикация рейтинга и отзывов
+
+### Производительность
+
+- `FlatList` для виртуализации длинных списков
+- `React.memo` для оптимизации рендеринга карточек
+- Ленивая загрузка навигации
+
+## 🐛 Troubleshooting
+
+### Metro cache issues
+
+```bash
+npm start -- --reset-cache
+```
+
+### iOS build issues
+
+```bash
+cd ios && pod install && cd ..
+```
+
+### Android build issues
+
+```bash
+cd android && ./gradlew clean && cd ..
+```
+
+## 📝 Лицензия
+
+MIT
+
+## 👨‍💻 Автор
+
+Ваше имя
