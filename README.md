@@ -227,10 +227,6 @@ cd ios && pod install && cd ..
 cd android && ./gradlew clean && cd ..
 ```
 
-## 📝 Лицензия
-
-MIT
-
 ## 👨‍💻 Автор
 
-Ваше имя
+Aldar Okonov
