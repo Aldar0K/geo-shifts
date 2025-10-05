@@ -1,8 +1,9 @@
-import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { formatDate, formatTime } from '../../../shared/lib/date';
-import { formatPrice } from '../../../shared/lib/number';
-import { Shift } from '../model/types';
+import React from "react";
+import { Image, Text, TouchableOpacity, View } from "react-native";
+import { formatDate, formatTime } from "../../../shared/lib/date";
+import { formatPrice } from "../../../shared/lib/number";
+import { useThemedStyles } from "../../../shared/lib/theme";
+import { Shift } from "../model/types";
 
 interface ShiftCardProps {
   shift: Shift;
@@ -11,6 +12,8 @@ interface ShiftCardProps {
 
 export const ShiftCard: React.FC<ShiftCardProps> = React.memo(
   ({ shift, onPress }) => {
+    const styles = useThemedStyles(createStyles);
+
     return (
       <TouchableOpacity style={styles.card} onPress={onPress}>
         <View style={styles.header}>
@@ -20,7 +23,7 @@ export const ShiftCard: React.FC<ShiftCardProps> = React.memo(
               {shift.companyName}
             </Text>
             <Text style={styles.workType} numberOfLines={1}>
-              {shift.workTypes.map(wt => wt.name).join(', ')}
+              {shift.workTypes.map((wt) => wt.name).join(", ")}
             </Text>
           </View>
         </View>
@@ -35,7 +38,7 @@ export const ShiftCard: React.FC<ShiftCardProps> = React.memo(
         <View style={styles.row}>
           <Text style={styles.label}>Время</Text>
           <Text style={styles.value}>
-            {formatTime(shift.timeStartByCity)} -{' '}
+            {formatTime(shift.timeStartByCity)} -{" "}
             {formatTime(shift.timeEndByCity)}
           </Text>
         </View>
@@ -51,32 +54,34 @@ export const ShiftCard: React.FC<ShiftCardProps> = React.memo(
           <Text style={styles.price}>{formatPrice(shift.priceWorker)}</Text>
           <View style={styles.rating}>
             <Text style={styles.ratingText}>
-              ⭐ {shift.customerRating ?? 'Новый'}
+              ⭐ {shift.customerRating ?? "Новый"}
             </Text>
-            <Text style={styles.reviewsCount}>({shift.customerFeedbacksCount})</Text>
+            <Text style={styles.reviewsCount}>
+              ({shift.customerFeedbacksCount})
+            </Text>
           </View>
         </View>
       </TouchableOpacity>
     );
-  },
+  }
 );
 
-const styles = StyleSheet.create({
+const createStyles = (colors: any) => ({
   card: {
-    backgroundColor: '#FFF',
     borderRadius: 12,
     padding: 16,
     marginHorizontal: 16,
     marginVertical: 8,
-    shadowColor: '#000',
+    backgroundColor: colors.surface,
+    shadowColor: colors.shadow,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row" as const,
+    alignItems: "center" as const,
     marginBottom: 12,
   },
   logo: {
@@ -90,59 +95,59 @@ const styles = StyleSheet.create({
   },
   companyName: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
+    fontWeight: "600" as const,
     marginBottom: 4,
+    color: colors.textPrimary,
   },
   workType: {
     fontSize: 14,
-    color: '#666',
+    color: colors.textSecondary,
   },
   divider: {
     height: 1,
-    backgroundColor: '#E5E5E5',
     marginVertical: 12,
+    backgroundColor: colors.border,
   },
   row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row" as const,
+    justifyContent: "space-between" as const,
     marginBottom: 8,
   },
   label: {
     fontSize: 14,
-    color: '#666',
+    color: colors.textSecondary,
   },
   value: {
     fontSize: 14,
-    color: '#333',
-    fontWeight: '500',
+    fontWeight: "500" as const,
+    color: colors.textPrimary,
   },
   footer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row" as const,
+    justifyContent: "space-between" as const,
+    alignItems: "center" as const,
     marginTop: 12,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#E5E5E5',
+    borderTopColor: colors.border,
   },
   price: {
     fontSize: 18,
-    fontWeight: '700',
-    color: '#007AFF',
+    fontWeight: "700" as const,
+    color: colors.primary,
   },
   rating: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row" as const,
+    alignItems: "center" as const,
   },
   ratingText: {
     fontSize: 14,
-    fontWeight: '600',
-    color: '#333',
+    fontWeight: "600" as const,
     marginRight: 4,
+    color: colors.textPrimary,
   },
   reviewsCount: {
     fontSize: 12,
-    color: '#666',
+    color: colors.textSecondary,
   },
 });

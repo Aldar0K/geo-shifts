@@ -1,6 +1,6 @@
-import {apiClient} from '../../../shared/api/client';
-import {ENDPOINTS} from '../../../shared/config/constants';
-import {Shift, ShiftsResponse} from '../model/types';
+import { apiClient } from "../../../shared/api/client";
+import { ENDPOINTS } from "../../../shared/config/constants";
+import { Shift, ShiftsResponse } from "../model/types";
 
 interface FetchShiftsParams {
   latitude: number;
@@ -12,8 +12,7 @@ export const fetchShifts = async ({
   longitude,
 }: FetchShiftsParams): Promise<Shift[]> => {
   const response = await apiClient.get<ShiftsResponse>(ENDPOINTS.SHIFTS, {
-    params: {latitude, longitude},
+    params: { latitude, longitude },
   });
   return response.data.data;
 };
-

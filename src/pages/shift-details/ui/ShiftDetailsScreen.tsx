@@ -1,17 +1,19 @@
-import { RouteProp, useRoute } from '@react-navigation/native';
-import { observer } from 'mobx-react-lite';
-import React from 'react';
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { shiftsStore } from '../../../entities/shift/model/shifts.store';
-import { RootStackParamList } from '../../../processes/navigation/types';
-import { formatDate, formatTime } from '../../../shared/lib/date';
-import { formatPrice } from '../../../shared/lib/number';
-import { ErrorView } from '../../../shared/ui/ErrorView';
+import { RouteProp, useRoute } from "@react-navigation/native";
+import { observer } from "mobx-react-lite";
+import React from "react";
+import { Image, ScrollView, Text, View } from "react-native";
+import { shiftsStore } from "../../../entities/shift/model/shifts.store";
+import { RootStackParamList } from "../../../processes/navigation/types";
+import { formatDate, formatTime } from "../../../shared/lib/date";
+import { formatPrice } from "../../../shared/lib/number";
+import { useThemedStyles } from "../../../shared/lib/theme";
+import { ErrorView } from "../../../shared/ui/ErrorView";
 
-type ShiftDetailsRouteProp = RouteProp<RootStackParamList, 'ShiftDetails'>;
+type ShiftDetailsRouteProp = RouteProp<RootStackParamList, "ShiftDetails">;
 
 export const ShiftDetailsScreen: React.FC = observer(() => {
   const route = useRoute<ShiftDetailsRouteProp>();
+  const styles = useThemedStyles(createStyles);
   const { shiftId } = route.params;
 
   const shift = shiftsStore.getShiftById(shiftId);
@@ -28,7 +30,7 @@ export const ShiftDetailsScreen: React.FC = observer(() => {
           <Text style={styles.companyName}>{shift.companyName}</Text>
           <View style={styles.ratingContainer}>
             <Text style={styles.ratingText}>
-              ⭐ {shift.customerRating ?? 'Новый'}
+              ⭐ {shift.customerRating ?? "Новый"}
             </Text>
             <Text style={styles.reviewsCount}>
               ({shift.customerFeedbacksCount})
@@ -40,7 +42,7 @@ export const ShiftDetailsScreen: React.FC = observer(() => {
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Тип работы</Text>
         <Text style={styles.sectionText}>
-          {shift.workTypes.map(wt => wt.name).join(', ')}
+          {shift.workTypes.map((wt) => wt.name).join(", ")}
         </Text>
       </View>
 
@@ -55,7 +57,7 @@ export const ShiftDetailsScreen: React.FC = observer(() => {
           {formatDate(shift.dateStartByCity)}
         </Text>
         <Text style={styles.sectionText}>
-          {formatTime(shift.timeStartByCity)} -{' '}
+          {formatTime(shift.timeStartByCity)} -{" "}
           {formatTime(shift.timeEndByCity)}
         </Text>
       </View>
@@ -74,18 +76,18 @@ export const ShiftDetailsScreen: React.FC = observer(() => {
   );
 });
 
-const styles = StyleSheet.create({
+const createStyles = (colors: any) => ({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: colors.background,
   },
   header: {
-    backgroundColor: '#FFF',
     padding: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row" as const,
+    alignItems: "center" as const,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E5E5',
+    backgroundColor: colors.surface,
+    borderBottomColor: colors.border,
   },
   logo: {
     width: 80,
@@ -98,62 +100,62 @@ const styles = StyleSheet.create({
   },
   companyName: {
     fontSize: 20,
-    fontWeight: '700',
-    color: '#333',
+    fontWeight: "700" as const,
     marginBottom: 8,
+    color: colors.textPrimary,
   },
   ratingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row" as const,
+    alignItems: "center" as const,
   },
   ratingText: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
+    fontWeight: "600" as const,
     marginRight: 6,
+    color: colors.textPrimary,
   },
   reviewsCount: {
     fontSize: 14,
-    color: '#666',
+    color: colors.textSecondary,
   },
   section: {
-    backgroundColor: '#FFF',
     padding: 20,
     marginTop: 12,
+    backgroundColor: colors.surface,
   },
   sectionTitle: {
     fontSize: 14,
-    fontWeight: '600',
-    color: '#666',
+    fontWeight: "600" as const,
     marginBottom: 8,
-    textTransform: 'uppercase',
+    textTransform: "uppercase" as const,
+    color: colors.textSecondary,
   },
   sectionText: {
     fontSize: 16,
-    color: '#333',
     lineHeight: 24,
+    color: colors.textPrimary,
   },
   subText: {
     fontSize: 14,
-    color: '#666',
     marginTop: 4,
+    color: colors.textSecondary,
   },
   priceSection: {
-    backgroundColor: '#FFF',
     padding: 20,
     marginTop: 12,
     marginBottom: 20,
-    alignItems: 'center',
+    alignItems: "center" as const,
+    backgroundColor: colors.surface,
   },
   priceLabel: {
     fontSize: 14,
-    fontWeight: '600',
-    color: '#666',
+    fontWeight: "600" as const,
     marginBottom: 8,
+    color: colors.textSecondary,
   },
   priceValue: {
     fontSize: 32,
-    fontWeight: '700',
-    color: '#007AFF',
+    fontWeight: "700" as const,
+    color: colors.primary,
   },
 });
