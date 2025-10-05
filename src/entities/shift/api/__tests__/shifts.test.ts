@@ -26,11 +26,11 @@ describe("shifts API", () => {
       logo: "https://example.com/logo.png",
       workTypes: [
         {
+          id: 1,
           name: "Курьер",
-          id: 0,
-          nameGt5: "",
-          nameLt5: "",
-          nameOne: "",
+          nameGt5: "Курьер",
+          nameLt5: "Курьер",
+          nameOne: "Курьер",
         },
       ],
       address: "Test Address",
